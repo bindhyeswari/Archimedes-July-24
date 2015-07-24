@@ -7,9 +7,10 @@
     <script>
         angular.module('myApp', []).run(function ($rootScope) {
             $rootScope.message = 'Hello from $rootScope';
-        }).controller('MyController', function ($scope) {
+        }).controller('MyController', function ($http, $scope) {
+            $scope.username = 'Charles Park';
             $scope.message = 'Hello from MyController\'s $scope';
-        }).directive('gllLocalstorage', function () {
+        }).directive('gllLocalstorage', function ($interval) {
             return {
                 // Directive Definition Object
                 link: function (scope, element) {
@@ -18,13 +19,20 @@
                     console.log(element[0]);
 
                     // update the value from localstorage when the page loads
+                    scope.username = localStorage.getItem(element[0].dataset.uuid);
+
+                    var i = 0;
+                    setInterval(function () {
+                        scope.$apply(function () {
+                            scope.username = 'Charles' + i++;
+                            console.log(scope.username);
+                        });
+                    }, 1000);
 
 
                     // write the value to localstorage when there is a change event
-                    element[0].addEventListener('change', function () {
-                        console.log(this.value);
-                        console.log(this.dataset.uuid);
-                        window.localStorage.setItem(this.dataset.uuid, this.value);
+                    scope.$watch('username', function () {
+                        localStorage.setItem(element[0].dataset.uuid, scope.username);
                     });
                 }
             };
@@ -38,12 +46,12 @@
 <body>
     <div>{{message}}</div> <!--Hello from $rootScope-->
 
-        <input name="username" type="text" data-uuid="a3e29bd0-2b1e-4ed6-ba96-d4b33b923821" gll-localstorage/>
 
 
     <div ng-controller="MyController">
         <div>{{message}}</div> <!--Hello from mycontroller scope-->
         <div example></div> <!--<div>Hello from mycontroller scope</div>-->
+        <input ng-model="username" type="text" data-uuid="a3e29bd0-2b1e-4ed6-ba96-d4b33b923821" gll-localstorage/>
     </div>
 
 </body>

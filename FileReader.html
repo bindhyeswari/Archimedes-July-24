@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="base.css"/>
+    <title></title>
+    <script src="bower_components/angular/angular.js"></script>
+    <script>
+        angular.module('myApp', []).controller('MyController', function ($scope) {
+            $scope.message = 'Hello from controller!';
+            $scope.files = [];
+        }).directive('filereader', function ($q) {
+            return {
+                restrict: 'A',
+                templateUrl: '_filereader.html',
+                scope: {
+
+                },
+                link: function (scope, element) {
+                    scope.message = 'Scope from Directive!';
+                }
+            };
+        });
+    </script>
+</head>
+<body>
+    <div ng-controller="MyController">
+        {{message}}
+        <div filereader></div>
+    </div>
+</body>
+</html>
