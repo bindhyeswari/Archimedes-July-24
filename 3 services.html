@@ -7,9 +7,11 @@
     <script src="bower_components/angular/angular.js"></script>
     <script>
 
-        angular.module('myApp', []).config(function (User1) {
-            console.log('This function is running in the configuration phase ... ', User1);
-        }).run(function (User) {
+        angular.module('myApp', []).config(function (UserProvider, $httpProvider) {
+            console.log($httpProvider);
+            console.log('This function is running in the configuration phase ... ', UserProvider);
+        }).run(function (User, $http) {
+            $http.get('https://api.github.com/search/repositories?q=nodejs');
             console.log('This function is running in the run phase ... ', User.name);
         }).controller('MyController', function ($scope, User) {
             console.log('Running code for controller - MyController');
@@ -20,7 +22,15 @@
             $scope.print = function () {
                 console.log('Controller2 print (UserName): ', User.name);
             };
-        }).factory('User', UserFactory).constant('User1', 'Amy').value('User2', 'Lakshmi');
+        }).provider('User', function () {
+            // constructor function that will create an object
+            // the object will have a $get property
+            // the $get property is a function
+            // that you would use with a factory recipe
+
+            this.$get = UserFactory;
+
+        });
 
         // .factory('User', UserFactory)
         function UserFactory() {
