@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Services</title>
+    <link rel="stylesheet" href="base.css"/>
+    <script src="bower_components/angular/angular.js"></script>
+    <script>
+        angular.module('myApp', []).controller('MyController', function ($scope, UserName) {
+            console.log(typeof UserName);
+            UserName = 'Charles Park';
+            $scope.message = 'Hello from  ' + UserName;
+        }).controller('Controller2', function ($scope, UserName) {
+            $scope.print = function () {
+                console.log('Controller2 print (UserName): ', UserName);
+            };
+        }).constant('UserName', 'Alejandro Munoz');
+
+        // .factory('User', UserFactory)
+        function UserFactory() {
+
+            var _name = 'Amy';
+            return {
+                get name() {
+                    return _name;
+                }
+            };
+        }
+
+        // var User = new UserConstructor();
+        // .service('User', UserConstructor)
+        function UserConstructor() {
+            var _name = 'Lei Xu';
+            Object.defineProperty(this, 'name', {
+                get: function () {
+                    return _name;
+                }
+            });
+        }
+
+    </script>
+</head>
+<body>
+    <section>
+        <header><h1>Ways of defining a service</h1></header>
+        <ul>
+            <li>.factory()</li>
+            <li>.service()</li>
+            <li>.value()</li>
+            <li>.constant()</li>
+            <li>.provider()</li>
+        </ul>
+    </section>
+    <div ng-controller="MyController">
+        {{message}}
+    </div>
+    <div ng-controller="Controller2">
+        <button ng-click="print()">Print Name</button>
+    </div>
+</body>
+</html>
